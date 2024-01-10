@@ -2,7 +2,18 @@
 #include <fstream>
 #include <SFML/Graphics.hpp>
 
-
+std::vector <std::string> splitWords(std::string line, std::string delimiter){
+    std::vector<std::string> words;
+    
+    int del = line.find(delimiter);
+    while (del != -1) {
+        words.push_back(line.substr(0, del));
+        line.erase(line.begin(), line.begin() + del + 1);
+        del = line.find(delimiter);
+    }
+    words.push_back(line.substr(0, line.size()));
+    return words;
+}
 sf::Color getColor(std::vector <std::string> words) {
     // 6 7 8
     if (words.at(1).at(0) == 'C') {
@@ -30,9 +41,7 @@ int main()
         return -1;
     }
 
-    while(std::getline(configFile, line)) {
-        
-    }
+
 
     configFile.close();
     return 0;
