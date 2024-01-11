@@ -34,7 +34,7 @@ int main()
     std::vector <sf::Text> texts;
     sf::Text text;
     std::string line;
-    float xVelocity = 0.0, yVelocity = 0.0, xPos = 0.0, yPos = 0.0;
+    float xVelocity = 0.0, yVelocity = 0.0, xPos = 0.0, yPos = 0.0, diameter = 0.0;
     sf::RenderWindow window;
     // open file
     std::ifstream configFile("C:\\Users\\Felicity\\source\\repos\\BoundingShapes\\configs\\config.txt");
@@ -49,9 +49,9 @@ int main()
         std::cout << std::endl;
         if (words.at(0) == "Circle") {
            // sf::Color color, float radius, sf::Vector2f pos, float x_vel, float y_vel
-            cirs.push_back((CIRCLE(getColor(words), std::stof(words.at(words.size() - 1)),
+            cirs.push_back((CIRCLE(getColor(words), std::stof(words.at(9)),
                 (sf::Vector2f(std::stof(words.at(2)), 
-                    std::stof(words.at(3)))), std::stoi(words.at(4)), std::stoi(words.at(5)))));
+                    std::stof(words.at(3)))), std::stof(words.at(4)), std::stof(words.at(5)))));
         }
         else if (words.at(0) == "Rectangle") {
             // sf::Color color, sf::Vector2f size, sf::Vector2f pos, float x_vel, float y_vel
@@ -79,7 +79,6 @@ int main()
         }
     }
 
-    sf::Event event;
 
     while (window.isOpen()) {
         // render
@@ -92,8 +91,6 @@ int main()
             xVelocity = r.getXVelocity();
             yVelocity = r.getYVelocity();
 
-            std::cout << " old x: " << xPos << " y: " << yPos <<  std::endl;
-        
             if (xPos >= (window.getSize().x - r.rect.getSize().x) || xPos <= 0) {
                 r.setXVelocity(-xVelocity);
             }
@@ -103,13 +100,34 @@ int main()
             xPos += r.getXVelocity();
             yPos += r.getYVelocity();
 
-            std::cout << " new x: " << xPos << " y: " << yPos << std::endl;
 
             r.rect.setPosition(sf::Vector2f(xPos, yPos));
             window.draw(r.rect);
             
          }
+         
+         for (auto& c : cirs) {
+             xPos = c.getXPos();
+             yPos = c.getYPos();
+             xVelocity = c.getXVelocity();
+             yVelocity = c.getYVelocity();
+             diameter = c.cir.getRadius() * 2;
 
+             if ((xPos + diameter) >= (window.getSize().x) || xPos <= 0) {
+                 c.setXVelocity(-xVelocity);
+             }
+             if ((yPos + diameter) >= (window.getSize().y ) || yPos <= 0) {
+                 c.setYVelocity(-yVelocity);
+             }
+             
+             xPos += c.getXVelocity();
+             yPos += c.getYVelocity();
+
+             c.setPos(xPos, yPos);
+             window.draw(c.cir);
+
+         }
+         
         
 
         
