@@ -47,12 +47,14 @@ int main()
         words = splitWords(line, " ");
 
         std::cout << std::endl;
+        // if item is circle, then make CIRCLE item and add them to the vector
         if (words.at(0) == "Circle") {
            // sf::Color color, float radius, sf::Vector2f pos, float x_vel, float y_vel
             cirs.push_back((CIRCLE(getColor(words), std::stof(words.at(9)),
                 (sf::Vector2f(std::stof(words.at(2)), 
                     std::stof(words.at(3)))), std::stof(words.at(4)), std::stof(words.at(5)))));
         }
+        // if item is rectangle, then make RECT item and add them to the vector
         else if (words.at(0) == "Rectangle") {
             // sf::Color color, sf::Vector2f size, sf::Vector2f pos, float x_vel, float y_vel
             rects.push_back(RECT(getColor(words), 
@@ -83,7 +85,7 @@ int main()
     while (window.isOpen()) {
         // render
         window.clear(sf::Color::Black);
-       
+           // for all the rectangles, move at the vector speed and draw them
          for (auto& r : rects) {
             
             xPos = r.getXPos();
@@ -105,7 +107,7 @@ int main()
             window.draw(r.rect);
             
          }
-         
+         // // for all the circles, move at the vector speed and draw them
          for (auto& c : cirs) {
              xPos = c.getXPos();
              yPos = c.getYPos();
@@ -128,17 +130,10 @@ int main()
 
          }
          
-        
-
-        
+        // display
         window.display();
     }
-    
-    // TEST
-    std::cout << "The size of the circle vector is " << cirs.size() << std::endl;
-    std::cout << "The size of the rectangle vector is " << rects.size() << std::endl;
-    
-
+    // close the file
     configFile.close();
     return 0;
 }
